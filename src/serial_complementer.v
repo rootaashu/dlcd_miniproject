@@ -37,16 +37,12 @@ module serial_complementer #(
     wire seen_one;
     wire serial_in;
 
-    // LSB is shifted out first
     assign serial_out = shift_reg[0];
 
-    // Complement logic
     assign serial_in = serial_out ^ seen_one;
 
-    // Parallel register output
     assign parallel_out = shift_reg;
 
-    // State detection flip-flop
     first_one_ff state_ff (
         .clk(clk),
         .rst_n(rst_n),
