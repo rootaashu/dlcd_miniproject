@@ -33,6 +33,30 @@ module serial_complementer #(
 );
 
 
+    reg [N-1:0] shift_reg;
+    wire seen_one;
+    wire serial_in;
+
+    // LSB is shifted out first
+    assign serial_out = shift_reg[0];
+
+    // Complement logic
+    assign serial_in = serial_out ^ seen_one;
+
+    // Parallel register output
+    assign parallel_out = shift_reg;
+
+    // State detection flip-flop
+    first_one_ff state_ff (
+        .clk(clk),
+        .rst_n(rst_n),
+        .clear(load),
+        .enable(shift_en),
+        .serial_bit(serial_out),
+        .seen_one(seen_one)
+    );
+
+
  always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             shift_reg <= {N{1'b0}};
