@@ -31,3 +31,17 @@ module serial_complementer #(
     output wire         serial_out,
     output wire [N-1:0] parallel_out
 );
+
+
+ always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            shift_reg <= {N{1'b0}};
+
+        else if (load)
+            shift_reg <= parallel_in;
+
+        else if (shift_en)
+            shift_reg <= {serial_in, shift_reg[N-1:1]};
+    end
+
+endmodule
