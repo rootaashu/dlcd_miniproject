@@ -17,3 +17,17 @@ module first_one_ff (
     end
 
 endmodule;
+
+
+module serial_complementer #(
+    parameter N = 8
+)(
+    input  wire         clk,
+    input  wire         rst_n,
+    input  wire         load,
+    input  wire         shift_en,
+    input  wire [N-1:0] parallel_in,
+
+    output wire         serial_out,
+    output wire [N-1:0] parallel_out
+);
