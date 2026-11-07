@@ -5,9 +5,9 @@ module first_one_ff (
     input  wire enable,
     input  wire serial_bit,
     output reg  seen_one
-)
+);
 
-  always @(posedge clk or negedge rst_n) begin
+always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             seen_one <= 1'b0;
         else if (clear)
@@ -16,7 +16,7 @@ module first_one_ff (
             seen_one <= seen_one | serial_bit;
     end
 
-endmodule;
+endmodule
 
 
 module serial_complementer #(
