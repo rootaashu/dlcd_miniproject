@@ -18,9 +18,7 @@ module tb_serial_complementer;
     wire serial_out;
     wire [N-1:0] parallel_out;
 
- 
 
-    // Instantiate the design
     serial_complementer #(.N(N)) dut (
         .clk(clk),
         .rst_n(rst_n),
@@ -30,11 +28,10 @@ module tb_serial_complementer;
         .serial_out(serial_out),
         .parallel_out(parallel_out)
     );
-  // Clock generation: 10 ns period
+  
     always #5 clk = ~clk;
 
-    // Test one input
-    task test_input;
+      task test_input;
         input [N-1:0] data;
         input [N-1:0] expected;
 
