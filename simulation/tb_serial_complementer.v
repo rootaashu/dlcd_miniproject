@@ -9,12 +9,16 @@ module tb_serial_complementer;
     reg rst_n;
     reg load;
     reg shift_en;
-    reg [N-1:0] parallel_in;
+    reg[N-1:0] parallel_in;
+    reg [N-1:0] user_input;
+
+    integer scan_result;
+    integer i;
 
     wire serial_out;
     wire [N-1:0] parallel_out;
 
-    integer i;
+ 
 
     // Instantiate the design
     serial_complementer #(.N(N)) dut (
@@ -26,8 +30,7 @@ module tb_serial_complementer;
         .serial_out(serial_out),
         .parallel_out(parallel_out)
     );
-
-    // Clock generation: 10 ns period
+  // Clock generation: 10 ns period
     always #5 clk = ~clk;
 
     // Test one input
@@ -37,7 +40,7 @@ module tb_serial_complementer;
 
         begin
             @(negedge clk);
-            parallel_in = data;
+            parallel_in = data ;
             load = 1'b1;
 
             @(posedge clk);
@@ -51,6 +54,7 @@ module tb_serial_complementer;
                 @(negedge clk);
 
                 $write("%b", serial_out);
+
                 shift_en = 1'b1;
 
                 @(posedge clk);
@@ -68,26 +72,34 @@ module tb_serial_complementer;
         end
     endtask
 
-    initial begin
-        clk = 0;
-        rst_n = 0;
-        load = 0;
-        shift_en = 0;
-        parallel_in = 0;
+    
+initial begin
 
-        #12;
-        rst_n = 1;
+    
+    $dumpfile("simulation/waveform.vcd");
+    $dumpvars(0, tb_serial_complementer);
+    clk = 0;
+    rst_n = 0;
+    load = 0;
+    shift_en = 0;
+    parallel_in = 0;
 
-        test_input(8'b10110000, 8'b01010000);
-        test_input(8'b00001101, 8'b11110011);
-        test_input(8'b00000000, 8'b00000000);
-        test_input(8'b11111111, 8'b00000001);
-        test_input(8'b00000001, 8'b11111111);
+    #12;
+    rst_n = 1;
+	
+    $display("Enter an 8-bit binary number:");
+    scan_result = $fscanf(32'h80000000, "%b", user_input);
 
-        $display("\nAll test cases completed.");
-
-        $finish;
+    if (scan_result == 1) begin
+        $display("Input: %b", user_input);
+        test_input(user_input, (~user_input + 1'b1));
     end
+    else begin
+        $display("Invalid input!");
+    end
+
+    $finish;
+end
 
 endmodule
 

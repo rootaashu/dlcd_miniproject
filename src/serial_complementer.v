@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module first_one_ff (
     input  wire clk,
     input  wire rst_n,
