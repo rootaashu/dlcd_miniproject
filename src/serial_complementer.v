@@ -8,7 +8,7 @@ module first_one_ff (
     input  wire serial_bit,
     output reg  seen_one
 );
-
+// checks where the first 1 occur 
 always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             seen_one <= 1'b0;
@@ -35,9 +35,11 @@ module serial_complementer #(
 );
 
 
-    reg [N-1:0] shift_reg;
-    wire seen_one;
-    wire serial_in;
+    reg [N-1:0] shift_reg; //8-bit data 
+   
+    wire seen_one; // first 1 is encoutered 
+   
+    wire serial_in; // gets back into the shift register 
 
     assign serial_out = shift_reg[0];
 
@@ -57,13 +59,13 @@ module serial_complementer #(
 
  always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
-            shift_reg <= {N{1'b0}};
+            shift_reg <= {N{1'b0}}; // reset 
 
         else if (load)
-            shift_reg <= parallel_in;
+            shift_reg <= parallel_in; //load input copied into register 
 
         else if (shift_en)
-            shift_reg <= {serial_in, shift_reg[N-1:1]};
+            shift_reg <= {serial_in, shift_reg[N-1:1]}; // 7 bit down to 1 bit; shift right  
     end
 
 endmodule
